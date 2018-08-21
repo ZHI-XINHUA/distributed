@@ -39,5 +39,26 @@ public class MessagePackDemo {
         for (String s: list1) {
             System.out.println(s);
         }
+
+
+        test1();
     }
+
+    public static void test1() throws IOException {
+        Student student = new Student();
+        student.setName("james");
+        student.setAge(33);
+
+        //创建MessagePack对象
+        MessagePack messagePack  = new MessagePack();
+
+        //序列化
+        byte[] bytes = messagePack.write(student);
+
+        Student student1 = messagePack.read(bytes,Student.class);
+        System.out.println(student1.toString());
+
+    }
+
+
 }
