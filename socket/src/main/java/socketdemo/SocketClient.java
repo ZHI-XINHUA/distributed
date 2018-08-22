@@ -8,14 +8,14 @@ import java.net.Socket;
  */
 public class SocketClient {
     public static void main(String[] args) throws Exception {
-        client1();
+        client();
     }
 
     private static void client() throws IOException {
         Socket socket = null;
         try {
             //与服务端建立连接
-            socket = new Socket("localhost",8080);
+            socket = new Socket("localhost",8888);
 
             //发送消息到服务端
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
@@ -23,13 +23,8 @@ public class SocketClient {
 
             //读取服务端信息
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while (true){
-                String serverData = reader.readLine();
-                if(serverData==null){
-                    break;
-                }
-                System.out.println("客户接收到的数据："+serverData);
-            }
+            String serverData = reader.readLine();
+            System.out.println("客户接收到的数据："+serverData);
 
             writer.close();
             reader.close();

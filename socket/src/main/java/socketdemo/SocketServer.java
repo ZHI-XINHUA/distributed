@@ -11,12 +11,12 @@ import java.net.Socket;
 public class SocketServer {
 
     public static void main(String[] args) throws Exception{
-        server1();
+        server();
     }
 
     private  static void server() throws IOException {
         //端口
-        int port = 8080;
+        int port = 8888;
         ServerSocket server = null;
 
         try {
@@ -27,20 +27,15 @@ public class SocketServer {
 
             //读取数据
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //读取客户端发送过来的消息
+            String clientData=reader.readLine();
+
+            System.out.println("服务端接收到的数据："+clientData);
 
             //发送数据给客户端
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            while(true){
-                //读取客户端发送过来的消息
-                String clientData=reader.readLine();
-                if(clientData==null){
-                    break;
-                }
-                System.out.println("服务端接收到的数据："+clientData);
-
-                writer.println("hello client!");
-                writer.flush();
-            }
+            writer.println("hello client!");
+            writer.flush();
 
             reader.close();
             writer.close();
