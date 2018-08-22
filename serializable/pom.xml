@@ -40,7 +40,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.31</version>
         </dependency>
-        <!--百度封装的protobuf-->
+        <!--百度封装的protobuf -->
         <dependency>
             <groupId>com.baidu</groupId>
             <artifactId>jprotobuf</artifactId>
