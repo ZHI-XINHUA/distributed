@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://cxf.apache.org/jaxrs
+    http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <!--扫描包-->
+    <context:component-scan base-package="rest_spring_cxf"/>
+
+    <jaxrs:server id="restServiceContainer">
+        <jaxrs:serviceBeans>
+            <ref bean="userServiceImpl"/>
+        </jaxrs:serviceBeans>
+
+        <!--数据类型转化支持-->
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json"/>
+            <entry key="xml" value="application/xml"/>
+        </jaxrs:extensionMappings>
+
+        <!--数据类型转化支持-->
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+        </jaxrs:providers>
+
+    </jaxrs:server>
+</beans>
