@@ -13,7 +13,7 @@ import static org.apache.zookeeper.Watcher.Event.*;
  */
 public class ConnectionZk implements Watcher{
     //服务器连接地址
-    private static  String host = "192.168.100.51:2181,192.168.100.59:2181,192.168.100.84:2181";
+    private static  String host = "192.168.1.106:2181,192.168.1.108:2181,192.168.1.109:2181";
     //超时时间
     private static int sessionTimeout= 5000;
 
