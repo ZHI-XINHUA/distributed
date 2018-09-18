@@ -99,7 +99,7 @@ class NioServer implements Runnable{
         }
         //如果状态为可写
         if(key.isWritable()){
-            doWrite(key);
+            //doWrite(key);
         }
     }
 
