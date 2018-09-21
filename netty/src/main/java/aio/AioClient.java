@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -34,6 +36,13 @@ public class AioClient {
         c1.write("c1 aaa");
         c2.write("c2 bbbb");
         c3.write("c3 ccccc");
+
+        String a = "d";
+        String b="c";
+        a.compareTo(b);
+
+        TreeMap<String,String> treeMap = new TreeMap<String, String>();
+        treeMap.put("d","d");
     }
 }
 

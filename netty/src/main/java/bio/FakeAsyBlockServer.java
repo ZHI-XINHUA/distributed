@@ -22,13 +22,13 @@ public class FakeAsyBlockServer {
     public static void server(int port){
         ServerSocket server = null;
         try{
-            //1、监听端口
+            //1、创建一个新的 ServerSocket，用以监听指定端口上的连接请求
             server = new ServerSocket(port);
             Socket socket = null;
 
             //无限循环监听客户端连接
             while(true){
-                //2、阻塞，等待客户端信息
+                //2、将被阻塞，直到一个连接建立
                 socket = server.accept();
 
                 //3、自定义线程池处理客户端返回信息
