@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpContentDecoder;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpRequestEncoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import org.apache.log4j.Logger;
 
 /**
@@ -37,7 +38,7 @@ public class MyTomcat {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             //服务端发送的是httpResponse，所以要使用HttpResponseEncoder进行编码
-                            socketChannel.pipeline().addLast(new HttpRequestEncoder());
+                            socketChannel.pipeline().addLast(new HttpResponseEncoder());
                             //服务端接收到的是httpRequest，所以要使用HttpRequestDecoder进行解码
                             socketChannel.pipeline().addLast(new HttpRequestDecoder());
                             //最后处理自己的逻辑
@@ -48,6 +49,7 @@ public class MyTomcat {
             //绑定服务端口
             ChannelFuture future = bootstrap.bind(port).sync();
 
+            System.out.println("HTTP服务已启动，监听端口:" + port);
             LOG.info("HTTP服务已启动，监听端口:" + port);
 
             //开始接收客户

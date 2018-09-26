@@ -40,7 +40,7 @@ public class MyResponse {
             //response.headers().set(HttpHeaderNames.EXPIRES,0);
             response.headers().addInt(HttpHeaderNames.CONTENT_LENGTH,response.content().readableBytes());
             response.headers().addInt(HttpHeaderNames.EXPIRES,0);
-            if(HttpHeaderUtil.isKeepAlive(request)){
+            if(HttpHeaders.isKeepAlive(request)){
                 response.headers().set(HttpHeaderNames.CONNECTION,HttpHeaderValues.KEEP_ALIVE);
             }
 
