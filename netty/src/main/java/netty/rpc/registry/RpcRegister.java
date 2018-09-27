@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RpcRegister {
     private static Logger LOG = Logger.getLogger(RpcRegister.class);
     /**存放注册中心注册的服务**/
-    public static ConcurrentHashMap<String,Object> registryMap;
+   // public static ConcurrentHashMap<String,Object> registryMap;
 
     /**
      * 开启服务
@@ -70,6 +70,6 @@ public class RpcRegister {
     }
 
     public static void main(String[] args) {
-
+            new RpcRegister().start(8081);
     }
 }
