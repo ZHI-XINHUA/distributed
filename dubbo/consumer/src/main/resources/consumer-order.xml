@@ -9,7 +9,8 @@
 
     <!-- 注册中心： -->
     <!--使用multicast广播注册中心暴露服务地址-->
-    <dubbo:registry address="multicast://224.5.6.7:1234"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234"/>-->
+    <dubbo:registry address="zookeeper://192.168.3.31:2181"/>
 
     <!-- 生成远程服务代理，orderServices -->
     <dubbo:reference id="orderServices"  interface="zxh.order.IOrderServices"/>
