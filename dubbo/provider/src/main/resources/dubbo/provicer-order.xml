@@ -5,23 +5,41 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!-- 提供方应用信息，用于计算依赖关系 -->
-   <!-- <dubbo:application name="provider-order" owner="zxh" logger="log4j"/>-->
+   <dubbo:application name="provider-order" owner="zxh" logger="log4j"/>
 
     <!-- 注册中心： -->
     <!--使用multicast广播注册中心暴露服务地址-->
-   <!-- <dubbo:registry address="multicast://224.5.6.7:1234"/>-->
-   <!-- <dubbo:registry protocol="zookeeper" address="192.168.3.31:2181,192.168.3.46:2181,192.168.3.118:2181"/>-->
+   <dubbo:registry  id="mult" address="multicast://224.5.6.7:1234" default="false"/>
+    <!--<dubbo:registry protocol="zookeeper" address="192.168.3.31:2181,192.168.3.46:2181,192.168.3.118:2181"/>-->
    <!-- <dubbo:registry address="zookeeper://192.168.3.31:2181?backup=192.168.3.46:2181,192.168.3.118:2181"/>-->
+    <dubbo:registry id="zk"  address="zookeeper://192.168.3.31:2182"/>
 
     <!-- 用dubbo协议在20880端口暴露服务 -->
-   <!-- <dubbo:protocol name="dubbo" port="20880"/>-->
+   <dubbo:protocol name="dubbo" port="20880"/>
+    <dubbo:protocol name="rmi" port="20888"/>
+
+
+
+    <!--服务接口：multicast作为注册中心,register="false":只订阅不注册-->
+    <dubbo:service interface="zxh.order.IOrderServices" ref="orderServices3" registry="mult" register="false"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="zxh.order.IOrderServices" ref="orderServices"/>
+    <dubbo:service interface="zxh.order.IOrderServices" ref="orderServices" version="1.0.0" registry="zk" protocol="dubbo"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="zxh.order.IOrderServices" ref="orderServices2" version="2.0.0" registry="zk" protocol="rmi"/>
+
+
 
     <!--配置监控中心-->
-    <dubbo:monitor protocol="registry"/>
+   <!-- <dubbo:monitor protocol="registry"/>-->
 
     <!-- 和本地bean一样实现服务 -->
     <bean id="orderServices" class="zxh.order.OrderServicesImpl"/>
+
+    <!--接口实现：测试版本-->
+    <bean id="orderServices2" class="zxh.order.OrderServicesImpl2"/>
+
+    <!--接口实现：测试多注册中心-->
+    <bean id="orderServices3" class="zxh.order.OrderServicesImpl3"/>
 </beans>

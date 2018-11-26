@@ -16,11 +16,13 @@ public class RemoteOrder {
     public static void main(String[] args) throws Exception {
 
        // System.in.read();
-        for(int i=0;i<20;i++) {
-            //apiConsumer();
-
-            xmlConsumer();
-        }
+//        for(int i=0;i<20;i++) {
+//            apiConsumer();
+//
+//            //xmlConsumer();
+//        }
+        xmlConsumer();
+        //System.in.read();
 
     }
 
@@ -36,7 +38,23 @@ public class RemoteOrder {
         DoRequest request = new DoRequest();
         request.setName("romte server");
         DoResponse response = services.doOrder(request);
-        System.out.println(response.toString());
+        System.out.println(response.toString()+"\n");
+
+        //直连远程服务
+       IOrderServices directOrderService = (IOrderServices) context.getBean("directOrderService");
+        request.setName("direct romte server");
+        response = directOrderService.doOrder(request);
+        System.out.println(response.toString()+"\n");
+
+
+        IOrderServices rmiOrderService = (IOrderServices) context.getBean("rmiOrderServices");
+        request.setName("rmi romte server");
+        response = rmiOrderService.doOrder(request);
+        System.out.println(response.toString()+"\n");
+
+        //直连远程服务
+
+
 
     }
 
@@ -50,7 +68,7 @@ public class RemoteOrder {
 
         // 连接注册中心配置
         RegistryConfig registry = new RegistryConfig();
-        registry.setProtocol("xml 方式实现消费");
+        registry.setProtocol("zookeeper");
         registry.setAddress("192.168.3.31:2182");
 
         // 注意：ReferenceConfig为重对象，内部封装了与注册中心的连接，以及与服务提供方的连接
@@ -59,7 +77,9 @@ public class RemoteOrder {
         reference.setApplication(application);// 多个注册中心可以用setRegistries()
         reference.setRegistry(registry);
         reference.setInterface(IOrderServices.class);
-        reference.setVersion("1.0.0");
+        reference.setVersion("2.0.0");
+
+        //reference.setCheck(false);
 
         // 和本地bean一样使用xxxService
         IOrderServices orderServices = reference.get();

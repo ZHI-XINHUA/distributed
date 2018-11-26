@@ -4,12 +4,12 @@ import zxh.base.DoRequest;
 import zxh.base.DoResponse;
 
 /**
- * 服务提供者实现
+ * IOrderServices 实现版本2
  */
-public class OrderServicesImpl implements IOrderServices{
+public class OrderServicesImpl2 implements IOrderServices {
     @Override
     public DoResponse doOrder(DoRequest request) {
-        System.out.println("OrderServicesImpl》请求已进来..."+request);
+        System.out.println("OrderServicesImpl2》请求已进来..." + request);
         DoResponse response = new DoResponse();
         response.setCode("200");
         response.setResult("处理成功");
