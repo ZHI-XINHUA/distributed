@@ -6,6 +6,7 @@ import com.alibaba.dubbo.config.RegistryConfig;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import zxh.base.DoRequest;
 import zxh.base.DoResponse;
+import zxh.config.RemoteServer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,8 +22,10 @@ public class RemoteOrder {
 //
 //            //xmlConsumer();
 //        }
-        xmlConsumer();
+        //xmlConsumer();
         //System.in.read();
+
+
 
     }
 
@@ -60,7 +63,9 @@ public class RemoteOrder {
 
     /**
      * api方式
+     * 迁移到ApiConfig
      */
+    @Deprecated
     public static void apiConsumer(){
         // 当前应用配置
         ApplicationConfig application = new ApplicationConfig();
