@@ -13,6 +13,9 @@
       <module>rmi</module>
       <module>thread</module>
         <module>zookeeper</module>
+        <module>dubbo</module>
+        <module>dubbo</module>
+        <module>dubbo</module>
     </modules>
 
     <name>zxh</name>
