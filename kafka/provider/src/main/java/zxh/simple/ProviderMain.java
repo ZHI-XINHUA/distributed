@@ -61,7 +61,7 @@ public class ProviderMain {
                 if(i==1){
                    // key = "banana";
                 }
-                ProducerRecord producerRecord = new ProducerRecord<String, String>(topic, null,  "myvalue_"+i);
+                ProducerRecord producerRecord = new ProducerRecord<String, String>(topic, key,  "myvalue_"+i);
                 //ProducerRecord producerRecord = new ProducerRecord<String, String>(topic, null,  "myvalue_"+i);
 
                 //返送消息记录到指定topic中

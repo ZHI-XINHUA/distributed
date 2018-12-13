@@ -59,6 +59,7 @@ public class ConsumerMain {
         //consumerConfig.put("receive.buffer.bytes",1*1024*1024);
         //consumerConfig.put("send.buffer.bytes",1*1024*1024);
 
+        //创建KafkaConsumer
         KafkaConsumer<String,String> consumer = new KafkaConsumer<String, String>(consumerConfig);
 
         //订阅主题列表；支持表达式：如 consumer.subscribe("test*")
@@ -95,10 +96,11 @@ public class ConsumerMain {
                     System.out.printf("partition=%s,offset = %d, key = %s, value = %s\n",
                             record.partition(),record.offset(), record.key(), record.value());
 
-                    //处理完当前批次的消息,在轮询更多 的消息之前 , 调用 COl'll'li.tSync() 方位提交当前批 次最新的偏移量。
+                    //同步提交：处理完当前批次的消息,在轮询更多 的消息之前 , 调用commitSync方位提交当前批 次最新的偏移量。
                     //consumer.commitSync();
                 }
 
+                //异步提交
                 consumer.commitAsync(new OffsetCommitCallback() {
                     @Override
                     public void onComplete(Map<TopicPartition, OffsetAndMetadata> map, Exception e) {
