@@ -3,6 +3,7 @@ package zxh.simple;
 import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -10,7 +11,16 @@ import java.util.concurrent.Future;
  * 生产端demo
  */
 public class ProviderMain {
+
     private static final String SERVERS = "192.168.3.31:9092,192.168.3.3.46:9092,192.168.3.118:9092";
+
+    public static void main(String[] args) {
+        try {
+            initProducer();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static  void initProducer() throws InterruptedException {
         Properties provoderConfig = new Properties();
@@ -38,18 +48,26 @@ public class ProviderMain {
         provoderConfig.put("max.in.flight.requests.per.connection",1);
         //控制生产者发送的请求大小;它可以指能发送的单个消息的最大值，也可以指单个请求里所有消息总的大小
         provoderConfig.put("max.request.size",1*1024*1024);
+        //指定分区器
+        //provoderConfig.put("partitioner.class","zxh.simple.MyPartitioner");
 
         //创建生成者
         Producer<String,String> producer = new KafkaProducer<String, String>(provoderConfig);
 
-        String topic = "my_topic_test";
-        for(int i=0;i<100;i++){
-            ProducerRecord producerRecord =  new ProducerRecord<String, String>(topic,"key_"+i,"value_"+i);
+        String topic = "mytopic4";
+        for(int j=0;j<3;j++) {
+            for (int i = 1; i <= 3; i++) {
+                String key = "mykey_"+i;
+                if(i==1){
+                   // key = "banana";
+                }
+                ProducerRecord producerRecord = new ProducerRecord<String, String>(topic, key,  "myvalue_"+i);
+                //ProducerRecord producerRecord = new ProducerRecord<String, String>(topic, null,  "myvalue_"+i);
 
-            //返送消息记录到指定topic中
-            //消息先是被放进缓冲区，然后使用单独的线程发送到服务器端。
-           // Future<RecordMetadata> future =  producer.send(producerRecord);
-            //同步发送
+                //返送消息记录到指定topic中
+                //消息先是被放进缓冲区，然后使用单独的线程发送到服务器端。
+                // Future<RecordMetadata> future =  producer.send(producerRecord);
+                //同步发送
 //            try {
 //                //get()等待 Kafka 响应。如果服务器返回错误， get 方怯会抛出异常。如果没有发生错误，我们会得到一个RecordMetadata对象，可以用它获取消息的偏移量。
 //                future.get();
@@ -57,23 +75,20 @@ public class ProviderMain {
 //                e.printStackTrace();
 //            }
 
-            //异步发送
-            producer.send(producerRecord,new ProviderCallback());
+                //异步发送
+                producer.send(producerRecord, new ProviderCallback());
 
-            Thread.sleep(100);
+                Thread.sleep(100);
+            }
         }
 
         //关闭
         producer.close();
 
     }
-    public static void main(String[] args) {
-        try {
-            initProducer();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
 
 
     /**
@@ -96,6 +111,8 @@ public class ProviderMain {
             int partition = recordMetadata.partition();
             //偏移量
             long offset = recordMetadata.offset();
+
+
 
             System.out.println(" top="+topic +"\n partition="+partition +"\n" +
                     " hasOffset="+recordMetadata.hasOffset()+" \n offset="+offset+"\n toString="+ recordMetadata.toString());

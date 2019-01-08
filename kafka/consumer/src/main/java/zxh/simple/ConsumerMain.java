@@ -3,15 +3,13 @@ package zxh.simple;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by xh.zhi on 2018-12-10.
  */
 public class ConsumerMain {
-    private static final String SERVERS = "192.168.1.106:9092,192.168.1.108:9092,192.168.1.109:9092";
+    private static final String SERVERS = "192.168.3.31:9092,192.168.3.3.46:9092,192.168.3.118:9092";
     private static void initConsumer() throws Exception{
         Properties consumerConfig = new Properties();
         //该属性指定 broker 的地址清单;集群中建议两个以上，避免一个宕机则不可用
@@ -61,10 +59,28 @@ public class ConsumerMain {
         //consumerConfig.put("receive.buffer.bytes",1*1024*1024);
         //consumerConfig.put("send.buffer.bytes",1*1024*1024);
 
+        //创建KafkaConsumer
         KafkaConsumer<String,String> consumer = new KafkaConsumer<String, String>(consumerConfig);
 
         //订阅主题列表；支持表达式：如 consumer.subscribe("test*")
-        consumer.subscribe(Arrays.asList("my_topic_test","zxh"));
+        List<String> topList= Arrays.asList("mytopic4","zxh");
+        //consumer.subscribe(topList);
+
+        //订阅时再均衡监昕器
+        consumer.subscribe(topList, new ConsumerRebalanceListener() {
+            //在再均衡开始之前和消费者停止读取消息之后被调用。如果在这里提交偏移量，下一个接管分区的消费者就知道该从哪里开始读取了。
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> collection) {
+
+            }
+
+            //在重新分配分区之后和消费者开始读取消息之前被调用。
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> collection) {
+
+            }
+        });
+
 
         int minBatchSize = 200;
 
@@ -77,13 +93,14 @@ public class ConsumerMain {
                 它会在指定的毫秒数内一直等待 broker 返回数据。**/
                 ConsumerRecords<String,String> records =  consumer.poll(100);
                 for (ConsumerRecord<String, String> record : records){
-                    System.out.printf("offset = %d, key = %s, value = %s\n",
-                            record.offset(), record.key(), record.value());
+                    System.out.printf("partition=%s,offset = %d, key = %s, value = %s\n",
+                            record.partition(),record.offset(), record.key(), record.value());
 
-                    //处理完当前批次的消息,在轮询更多 的消息之前 , 调用 COl'll'li.tSync() 方位提交当前批 次最新的偏移量。
+                    //同步提交：处理完当前批次的消息,在轮询更多 的消息之前 , 调用commitSync方位提交当前批 次最新的偏移量。
                     //consumer.commitSync();
                 }
 
+                //异步提交
                 consumer.commitAsync(new OffsetCommitCallback() {
                     @Override
                     public void onComplete(Map<TopicPartition, OffsetAndMetadata> map, Exception e) {
@@ -91,20 +108,17 @@ public class ConsumerMain {
                             System.err.println("提交失败！");
                             return;
                         }
-//                        Set<Map.Entry<TopicPartition, OffsetAndMetadata>> set =  map.entrySet();
-//                        for (Map.Entry<TopicPartition, OffsetAndMetadata> entry:set
-//                             ) {
-//                            TopicPartition topicPartition = entry.getKey();
-//                            OffsetAndMetadata offsetAndMetadata = entry.getValue();
-//                            System.out.println("topic="+topicPartition.topic() + " offset="+offsetAndMetadata.offset());
-//
-//                        }
                     }
                 });
 
 
             }
+        }catch(Exception e){
+            e.printStackTrace();
         }finally {
+            //如果直接关闭消费者，就没有所谓的“下一次提交”了。使用 commitSync方法也会一直重式，直到提交成功或发生无陆恢复的错误。
+            consumer.commitSync();
+
            // consumer.close();
         }
 
