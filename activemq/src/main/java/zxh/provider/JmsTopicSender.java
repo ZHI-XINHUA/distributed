@@ -34,7 +34,7 @@ public class JmsTopicSender {
             MessageProducer producer = session.createProducer(destination);
 
             //创建发送的消息
-            TextMessage textMessage = session.createTextMessage("hello, I' am activemq！");
+            //TextMessage textMessage = session.createTextMessage("hello, I' am activemq！");
 
             //发送消息
             //producer.send(textMessage);

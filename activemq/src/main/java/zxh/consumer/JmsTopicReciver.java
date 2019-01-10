@@ -34,7 +34,7 @@ public class JmsTopicReciver {
 
             boolean hasMessage = true;
 
-            int i=1;
+
 
             while (hasMessage){
 
@@ -43,20 +43,11 @@ public class JmsTopicReciver {
                 if(message!=null){
                     System.out.println("收到的消息："+message.getText());
 
-                    if(i==5){//前面5条消息别确认消费
-                        //message.acknowledge();//Session.CLIENT_ACKNOWLEDGE
-                    }
-
-
                     //提交session，消息从队列中移除
                     session.commit();
                 }else {
-                    System.out.println("no");
                     hasMessage = false;
                 }
-
-                i++;
-
 
             }
 
