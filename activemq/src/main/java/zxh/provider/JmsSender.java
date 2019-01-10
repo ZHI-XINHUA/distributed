@@ -6,6 +6,7 @@ import javax.jms.*;
 
 /**
  * 消息生产端
+ * 点对点（p2p）模式
  */
 public class JmsSender {
     private static String brokerURL = "tcp://192.168.1.106:61616";
@@ -24,6 +25,7 @@ public class JmsSender {
 
             //创建会话
             session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
+            //session = connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);
 
             //创建队列（如果队列中存在则不会创建，first-queue是队列名称）
             //destination表示目的地
@@ -39,6 +41,8 @@ public class JmsSender {
             //producer.send(textMessage);
             sendMessage(session,producer);
 
+
+            //commit消息，消息将添加到队列中待消费者消费
             session.commit();
 
             session.close();

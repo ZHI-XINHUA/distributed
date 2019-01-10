@@ -6,6 +6,7 @@ import javax.jms.*;
 
 /**
  * 消息消费端
+ * 点对点（p2p）模式
  */
 public class JmsReciver {
     private static String brokerURL = "tcp://192.168.1.106:61616";
@@ -23,6 +24,7 @@ public class JmsReciver {
 
             //创建会话
             Session session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
+            //Session session = connection.createSession(Boolean.FALSE, Session.CLIENT_ACKNOWLEDGE);
 
             //创建队列,destination:目的地
             Destination destination = session.createQueue("first-queue");
@@ -30,15 +32,36 @@ public class JmsReciver {
             //创建消息接收者
             MessageConsumer consumer = session.createConsumer(destination);
 
-            while (true){
+            boolean hasMessage = true;
+
+            int i=1;
+
+            while (hasMessage){
+
                 //获取信息
                 TextMessage message = (TextMessage) consumer.receive();
                 if(message!=null){
                     System.out.println("收到的消息："+message.getText());
+
+                    if(i==5){//前面5条消息别确认消费
+                        //message.acknowledge();//Session.CLIENT_ACKNOWLEDGE
+                    }
+
+
+                    //提交session，消息从队列中移除
+                    session.commit();
+                }else {
+                    System.out.println("no");
+                    hasMessage = false;
                 }
 
+                i++;
+
+
             }
-        } catch (JMSException e) {
+
+            session.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }finally {
             try {
