@@ -9,7 +9,7 @@ import javax.jms.*;
  * 点对点（p2p）模式
  */
 public class JmsReciver {
-    private static String brokerURL = "tcp://192.168.1.106:61616";
+    private static String brokerURL = "tcp://localhost:61616";//tcp://192.168.1.106:61616";
     public static void main(String[] args) {
         //jms连接工厂
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);

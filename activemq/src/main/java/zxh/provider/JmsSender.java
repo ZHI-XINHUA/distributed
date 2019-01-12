@@ -9,10 +9,15 @@ import javax.jms.*;
  * 点对点（p2p）模式
  */
 public class JmsSender {
-    private static String brokerURL = "tcp://192.168.1.106:61616";
+    private static String brokerURL = "tcp://localhost:61616";//tcp://192.168.1.106:61616";
     public static void main(String[] args) {
         //连接工厂，jms创建连接
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURL);
+
+        //ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(brokerURL);
+        //可以设置消息发送端发送持久化消息的异步方式
+        //activeMQConnectionFactory.setUseAsyncSend(true);
+
         //jms客户端到JMS provider连接
         Connection connection = null;
         //jms会话
